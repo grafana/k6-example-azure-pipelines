@@ -1,0 +1,14 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-18.04'
+
+steps:
+- script: |
+    docker run -i loadimpact/k6 run - <loadtests/local.js
+  displayName: Run k6 from Docker locally
+
+- script: |
+    docker run -e K6_CLOUD_TOKEN=$(k6cloud.token) -i loadimpact/k6 cloud -<loadtests/cloud.js
+  displayName: Run k6 from Docker offloading to cloud
