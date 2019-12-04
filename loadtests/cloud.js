@@ -1,5 +1,8 @@
 import { check, group, sleep } from "k6";
 import http from "k6/http";
+import { Rate } from "k6/metrics";
+
+let failRate = new Rate("failed requests");
 
 // Test configuration
 export let options = {
@@ -10,7 +13,8 @@ export let options = {
         { duration: "10s", target: 0 }
     ],
     thresholds: {
-        "http_req_duration": ["p(95)<250"]
+        "http_req_duration": ["p(95)<250"],
+        "failed requests": ["rate<0.1"]
     },
     ext: {
         loadimpact: {
@@ -30,9 +34,11 @@ export default function() {
         let res = http.get("http://test.loadimpact.com/");
 
         // Make sure the status code is 200 OK
-        check(res, {
-            "is status 200": (r) => r.status === 200
-        });
+        if (check(res, { "is status 200": (r) => r.status === 200 })) {
+            failRate.add(false);
+        } else {
+            failRate.add(true);
+        }
 
         // Simulate user reading the page
         sleep(5);
