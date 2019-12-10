@@ -11,11 +11,6 @@ export let options = {
     ],
     thresholds: {
         "http_req_duration": ["p(95)<250"]
-    },
-    ext: {
-        loadimpact: {
-            name: "test.loadimpact.com"
-        }
     }
 };
 
