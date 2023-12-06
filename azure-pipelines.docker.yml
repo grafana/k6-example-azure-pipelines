@@ -3,9 +3,9 @@ pool:
 
 steps:
 - script: |
-    docker run -i -v `pwd`:/src loadimpact/k6 run /src/loadtests/local.js
+    docker run -i -v `pwd`:/src grafana/k6 run /src/loadtests/local.js
   displayName: Run k6 from Docker locally
 
 - script: |
-    docker run -i -v `pwd`:/src -e K6_CLOUD_TOKEN=$(k6cloud.token) loadimpact/k6 cloud /src/loadtests/cloud.js
+    docker run -i -v `pwd`:/src -e K6_CLOUD_TOKEN=$(k6cloud.token) grafana/k6 cloud /src/loadtests/cloud.js
   displayName: Run k6 from Docker offloading to cloud
